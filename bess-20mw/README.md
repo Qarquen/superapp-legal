@@ -3,8 +3,9 @@
 Santralde boşta duran **20 MW bağlantı kapasitesinin** batarya depolamaya çevrilmesi için
 fizibilite ve teşvik analizi. Hedef: **5 yılın altında amortisman.**
 
-- Model: `Izdemir_BESS_20MW_Model.xlsx` (377 formül, 0 hata; LibreOffice ile recalc edildi)
-- Sunum: Claude Slides deck (15 slayt)
+- Model: `Izdemir_BESS_20MW_Model.xlsx` (392 formül, 0 hata; LibreOffice ile recalc edildi)
+- Basit özet: `BESS_Basit_Ozet.xlsx` (tek sayfa, formüllü)
+- Sunum: Claude Slides deck (13 slayt)
 - Tarih: 27 Ekim 2026
 
 ## Sonuç
@@ -27,7 +28,9 @@ kapasite bedelinden geliyor, arbitrajdan yalnızca %7.
 5 yılda geri ödeme için gereken asgari SFK fiyatı: **1.077 TL/MW-h**
 (arbitraj geliri hiç olmazsa 1.233 TL/MW-h).
 2026'da gözlenen en düşük hafta 1.112 TL/MW — eşiğin hemen üzerinde.
-2025 ilk çeyrek seviyesinde (~844 TL/MW) **hedef tutmuyor** (geri ödeme 18,3 yıl).
+2025 ilk çeyrek seviyesinde (~844 TL/MW, ikincil kaynak) **hedef tutmuyor**: yalnız fiyat düşerse
+geri ödeme ≈6,6 yıl. 18,3 yıl ise fiyat, hacim, spread ve CAPEX'in birlikte kötüleştiği
+kötü senaryodur.
 
 ### Senaryolar
 | | Kötü | Baz | İyi |
@@ -37,6 +40,9 @@ kapasite bedelinden geliyor, arbitrajdan yalnızca %7.
 | CAPEX çarpanı | 1,25 | 1,00 | 0,85 |
 | Geri ödeme | 18,3 yıl | 2,6 yıl | 1,1 yıl |
 
+Kötü senaryoda SFK hacmi de 8 MW × 5.000 saate iner; dört olumsuzluk birliktedir.
+Yalnız SFK fiyatı değişirse (model, Senaryo Tablo 4): 844 → 6,6 yıl · 1.112 → 4,8 yıl · 2.000 → 2,6 yıl · 3.362 → 1,5 yıl · 4.701 → 1,1 yıl.
+
 ### Süre seçimi
 | | 1 saat | 2 saat | 4 saat |
 |---|---|---|---|
@@ -44,8 +50,8 @@ kapasite bedelinden geliyor, arbitrajdan yalnızca %7.
 | Birim | 265 USD/kWh | 180 USD/kWh | 137 USD/kWh |
 | Geri ödeme | 1,9 yıl | **2,6 yıl** | 3,8 yıl |
 
-SFK bedeli MW başına ödendiği için kısa süre daha hızlı geri öder; ancak 1 saat rezervi
-taşımaya yetmez. **2 saat önerilir.**
+SFK bedeli MW başına ödendiği için kısa süre daha hızlı geri öder. Modelde **2 saat temel
+alındı**; 1 saatlik seçeneğin TEİAŞ'ın rezerv süre şartına uyup uymadığı doğrulanmadı.
 
 ### Kur duyarlılığı (TL gelirler sabit — muhafazakâr)
 43,5 → 2,6 yıl · 48 → 2,9 yıl · 55 → 3,3 yıl · 62 → 3,8 yıl
@@ -92,11 +98,13 @@ sahiplerine tanınmış — termik lisansa bağlı 20 MW GES hakkı **doğmuyor*
 
 ## Doğrulama
 
-- `recalc.py`: 377 formül, **0 hata**.
+- `recalc.py`: 392 formül, **0 hata**.
 - Bağımsız Python karşı denetimi: CAPEX, SFK geliri, deşarj/şarj enerjisi, net arbitraj,
   net yıllık nakit, geri ödeme, NPV ve eşik SFK fiyatı — **hepsi birebir eşleşti**.
 - Yakalanan hata: "arbitraj gücü" formülü yanlış satıra referans veriyordu (20 MW yerine
   10 MW olmalı); düzeltildi ve yeniden doğrulandı.
+- 29 Ekim düzeltmesi: "1 saat rezervi taşımaya yetmez" gerekçesi doğrulanmamıştı; "SFK 844'e
+  inerse 18 yıl" ifadesi ise yanlıştı (tek başına ≈6,6 yıl). İkisi de kaldırıldı.
 
 ## Kaynaklar ve güvenilirlik
 
