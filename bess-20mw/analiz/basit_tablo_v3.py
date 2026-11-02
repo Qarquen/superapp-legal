@@ -91,9 +91,9 @@ ws.merge_cells("C33:L33"); c("C33", "Yatırımsız. Kısmi yük verim kaybı ve 
 
 ORN = Font(name=A, size=11, color="C55A11", bold=True); ORF = PatternFill("solid", fgColor="FBE5D6")
 c("A35", "5) ÖNERİLEN KURGU — santral sekonder, batarya primer", SECT, box=False)
-K = [(36, "Yük düşük 4 saatlik blok saati (yıl)", 1476, BLK, '#,##0', None, "Python, gerçek veri: ortalaması 1.500 altı olan 369 blok"),
-     (37, "Santralin sekonder teklifi (MW)", 50, ORN, '0', ORF, "ÖRNEK — santralin onaylı SFK bandı ve minimum yükü bilinince değiştir"),
-     (38, "Santral sekonder geliri (M TL/yıl)", "=B37*B36*$B$9/1000000", BOLD, '#,##0.0', None, "Yatırımsız; verim kaybı ve aşınma dahil değil"),
+K = [(36, "Santral sekonder geliri (M TL/yıl)", 382.0, BLK, '#,##0.0', None, "Python portföy optimizasyonu: 250–350 MW aralığında en fazla ±50 MW"),
+     (37, "Santralin kaybettiği elektrik satışı (M TL/yıl)", 252.9, BLK, '#,##0.0', None, "Aşağı yedek için santral 300 MW üstünde kalmalı — ucuz saatlerde zararına üretim"),
+     (38, "Santral sekonder NETİ (M TL/yıl)", "=B36-B37", BOLD, '#,##0.0', None, "Yatırımsız; verim kaybı ve aşınma dahil değil"),
      (39, "Batarya primer neti (M TL/yıl)", "=I16", BOLD, '#,##0.0', None, "Seçenek 1"),
      (40, "TOPLAM (M TL/yıl)", "=B38+B39", BOLD, '#,##0.0', GRN, "")]
 for r, lab, v, f, fmt, fill, nt in K:
@@ -118,5 +118,47 @@ ws.merge_cells("C50:L50"); c("C50", "KDV indirilebilir; kalıcı kazanç değil"
 
 note(52, "Veri: EPİAŞ saatlik PTF 25.04.2025–24.04.2026 (Temmuz 2025 ortalaması 2.965,16 ve 2025’te 889 saat PTF<1.500 ile doğrulandı). "
          "Kurallar ikincil kaynaklardan (TEİAŞ depolama kriterleri) — resmî metinle teyit edilmeli. Birim maliyetler teklif değil.", 32)
+
+import json as _j
+P = {x["senaryo"][:3].strip(): x for x in _j.load(open("/home/user/superapp-legal/bess-20mw/analiz/portfoy_sonuclari.json", encoding="utf-8"))}
+w2 = wb.create_sheet("Senaryolar"); w2.sheet_view.showGridLines = False
+for col, wd in zip("ABCDEFGHI", [46, 11, 11, 11, 12, 12, 13, 13, 12]): w2.column_dimensions[col].width = wd
+def c2(a, v, f=BLK, fmt=None, fill=None, wrap=False):
+    x = w2[a]; x.value = v; x.font = f; x.border = BOX
+    if fmt: x.number_format = fmt
+    if fill: x.fill = fill
+    x.alignment = Alignment(wrap_text=wrap, vertical="center")
+w2["A1"].value = "Python portföy optimizasyonu — santral + batarya, 8.760 saat, gerçek EPİAŞ fiyatları"; w2["A1"].font = TITLE
+w2["A2"].value = "Gri sayılar Python sonucu (portfoy_optimizasyon.py), siyah sütunlar formül. Bataryanın katkısı = senaryo neti − bataryasız referans."; w2["A2"].font = GRAY
+H = ["Senaryo", "Yatırım (M TL)", "Primer (M TL)", "Santral sek. (M TL)", "Santral enerji kaybı", "Portföy net (M TL/yıl)", "Referans net (bataryasız)", "Bataryanın katkısı", "Batarya geri ödeme (yıl)"]
+for i, t in enumerate(H):
+    x = w2.cell(row=4, column=1 + i, value=t); x.font = HDR; x.fill = HF; x.border = BOX
+    x.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+w2.row_dimensions[4].height = 44
+rows = [("S1", "S1 — Yalnız santral sekonder (bataryasız)", None), ("S3", "Önerilen: batarya 20/40 + santral sekonder", "S1"),
+        ("S4", "Ucuz enerji: batarya 20/25 + santral sekonder", "S1"), ("S5", "Büyük: batarya 40/50 + santral sekonder", "S1"),
+        ("S6", "Daha büyük: batarya 50/63 + santral sekonder", "S1"), ("S7", "Primer pazarı 10 MW ile sınırlı", "S1"),
+        ("D1", "Primer 669 (2025 seviyesi)", "S1"), ("D2", "Sekonder 1.112 (2026 en düşük)", "S1b"),
+        ("D3", "Primer 669 + sekonder 1.112 (ikisi kötü)", "S1b"), ("D4", "Kur 62", "S1")]
+GF = Font(name=A, size=11, color="595959")
+for i, (k, lab, ref) in enumerate(rows):
+    r = 5 + i; x = P[k]
+    c2(f"A{r}", lab, BOLD if k == "S3" else BLK)
+    c2(f"B{r}", x["capex"], GF, '#,##0.0'); c2(f"C{r}", x["pfk_gelir"], GF, '#,##0.0')
+    c2(f"D{r}", x["santral_sfk_gelir"], GF, '#,##0.0'); c2(f"E{r}", x["santral_enerji_degisim"], GF, '#,##0.0')
+    c2(f"F{r}", x["net"], GF, '#,##0.0'); c2(f"G{r}", P[ref]["net"] if ref else 0, GF, '#,##0.0')
+    if ref:
+        c2(f"H{r}", f"=F{r}-G{r}", BOLD, '#,##0.0')
+        c2(f"I{r}", f'=IF(H{r}<=0,"-",B{r}/H{r})', BOLD, '0.0', GRN if k == "S3" else None)
+    else:
+        c2(f"H{r}", "—"); c2(f"I{r}", "yatırımsız")
+r = 5 + len(rows) + 1
+w2[f"A{r}"].value = "20 MW üstü — ek batarya MW’larının kendi geri ödemesi"; w2[f"A{r}"].font = SECT
+for j, (k, lab) in enumerate([("S5", "40/50’ye çıkmak (S5 − S3)"), ("S6", "50/63’e çıkmak (S6 − S3)")]):
+    rr = r + 1 + j; i5 = 5 + [q[0] for q in rows].index(k)
+    c2(f"A{rr}", lab); c2(f"B{rr}", f"=B{i5}-B6", BLK, '#,##0.0'); c2(f"F{rr}", f"=F{i5}-F6", BLK, '#,##0.0')
+    c2(f"I{rr}", f"=B{rr}/F{rr}", BOLD, '0.0', RED)
+w2[f"A{r+4}"].value = "Sonuç: 20 MW’ın üstündeki her MW, 370 MW sınırında santralin sekonder payını yerinden ediyor; ek yatırım 5 yılın üstünde dönüyor."
+w2[f"A{r+4}"].font = GRAY
 ws.page_setup.orientation = "landscape"; ws.sheet_properties.pageSetUpPr.fitToPage = True; ws.page_setup.fitToWidth = 1; ws.page_setup.fitToHeight = 0
 wb.save(OUT); print("kaydedildi")
