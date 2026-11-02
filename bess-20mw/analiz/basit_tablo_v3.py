@@ -89,7 +89,34 @@ ws.merge_cells("C32:L32"); c("C32", "Gerçek veri: max(PTF − 1.500; 0), son 12
 c("A33", "Santral kendi SFK’sını 1 MW artırırsa (M TL/yıl)", BOLD); c("B33", "=$B$10*($B$9-B32)/1000000", BOLD, '0.0', GRN)
 ws.merge_cells("C33:L33"); c("C33", "Yatırımsız. Kısmi yük verim kaybı ve rampa kabiliyeti dahil değil.", GRAY, box=False)
 
-note(35, "Veri: EPİAŞ saatlik PTF 25.04.2025–24.04.2026 (Temmuz 2025 ortalaması 2.965,16 ve 2025’te 889 saat PTF<1.500 ile doğrulandı). "
+ORN = Font(name=A, size=11, color="C55A11", bold=True); ORF = PatternFill("solid", fgColor="FBE5D6")
+c("A35", "5) ÖNERİLEN KURGU — santral sekonder, batarya primer", SECT, box=False)
+K = [(36, "Yük düşük 4 saatlik blok saati (yıl)", 1476, BLK, '#,##0', None, "Python, gerçek veri: ortalaması 1.500 altı olan 369 blok"),
+     (37, "Santralin sekonder teklifi (MW)", 50, ORN, '0', ORF, "ÖRNEK — santralin onaylı SFK bandı ve minimum yükü bilinince değiştir"),
+     (38, "Santral sekonder geliri (M TL/yıl)", "=B37*B36*$B$9/1000000", BOLD, '#,##0.0', None, "Yatırımsız; verim kaybı ve aşınma dahil değil"),
+     (39, "Batarya primer neti (M TL/yıl)", "=I16", BOLD, '#,##0.0', None, "Seçenek 1"),
+     (40, "TOPLAM (M TL/yıl)", "=B38+B39", BOLD, '#,##0.0', GRN, "")]
+for r, lab, v, f, fmt, fill, nt in K:
+    c(f"A{r}", lab, BOLD if r == 40 else BLK); c(f"B{r}", v, f, fmt, fill)
+    ws.merge_cells(f"C{r}:L{r}"); c(f"C{r}", nt, GRAY, box=False)
+
+c("A42", "6) SEÇENEK 1 DUYARLILIK — geri ödeme (yıl)", SECT, box=False)
+for i, (pr, nt) in enumerate([(669, "PFK 2025 ilk çeyrek seviyesi"), (1879, "Modeldeki değer"), (3000, "Yüksek")]):
+    r = 43 + i
+    c(f"A{r}", f"PFK fiyatı {pr:,} TL/MW-saat".replace(",", ".")); c(f"C{r}", pr, BLUE, '#,##0')
+    c(f"B{r}", f"=E16/(F16*$B$10*C{r}/1000000-H16)", BOLD, '0.0')
+    ws.merge_cells(f"D{r}:L{r}"); c(f"D{r}", nt, GRAY, box=False)
+c("A46", "Kur 62 TL/USD olursa"); c("C46", 62, BLUE, '0')
+c("B46", "=((D16*1000*$B$6+C16*1000*$B$7)*C46/1000000)/(G16-((D16*1000*$B$6+C16*1000*$B$7)*C46/1000000*$B$11+$B$12))", BOLD, '0.0')
+ws.merge_cells("D46:L46"); c("D46", "TL fiyatlar sabit", GRAY, box=False)
+
+c("A48", "7) TEŞVİK DEĞERLERİ — Seçenek 1", SECT, box=False)
+c("A49", "Gümrük muafiyetinin değeri (M TL)"); c("B49", "=D16*1000*$B$6*0.3*$B$5/1000000", BOLD, '#,##0.0')
+ws.merge_cells("C49:L49"); c("C49", "Batarya tarafı × %30 ilave gümrük vergisi (tamamının vergiye girdiği varsayımıyla)", GRAY, box=False)
+c("A50", "KDV istisnası (M TL, nakit akışı)"); c("B50", "=E16*0.2", BOLD, '#,##0.0')
+ws.merge_cells("C50:L50"); c("C50", "KDV indirilebilir; kalıcı kazanç değil", GRAY, box=False)
+
+note(52, "Veri: EPİAŞ saatlik PTF 25.04.2025–24.04.2026 (Temmuz 2025 ortalaması 2.965,16 ve 2025’te 889 saat PTF<1.500 ile doğrulandı). "
          "Kurallar ikincil kaynaklardan (TEİAŞ depolama kriterleri) — resmî metinle teyit edilmeli. Birim maliyetler teklif değil.", 32)
 ws.page_setup.orientation = "landscape"; ws.sheet_properties.pageSetUpPr.fitToPage = True; ws.page_setup.fitToWidth = 1; ws.page_setup.fitToHeight = 0
 wb.save(OUT); print("kaydedildi")
