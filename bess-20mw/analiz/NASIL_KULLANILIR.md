@@ -1,3 +1,27 @@
+# Analizi kendin çalıştırmak
+
+## En kolay yol: hazır defter (önerilen)
+- **`BESS_Analiz.ipynb`**: tüm analizler, tablolar ve 4 grafik zaten çalıştırılmış hâlde.
+  GitHub'da ya da VS Code'da açınca sonuçları kod çalıştırmadan görürsün.
+- Kendin çalıştırmak için: VS Code (Jupyter eklentisi), Jupyter ya da Google Colab'da aç,
+  hücreleri yukarıdan aşağıya sırayla çalıştır. İlk hücre gerekli paketleri kurar,
+  veri internetten otomatik iner. Toplam süre yaklaşık 1 dakika.
+
+## Düz Python: `bess_kolay.py`
+```
+pip install pandas numpy highspy openpyxl matplotlib
+python bess_kolay.py
+```
+Argüman ve veri dosyası gerekmez; veriyi kendisi indirir, sonuçları yazar,
+grafikleri gösterir ve `bess_sonuclar.xlsx` dosyasını kaydeder.
+Varsayımlar dosyanın başındaki `V = {...}` sözlüğünde.
+
+> Not: `bess_analiz.py` komut satırı aracıdır, `--veri dosya.csv` olmadan çalışmaz.
+> Python konsoluna ya da Jupyter'e yapıştırırsan hata verir. Kopyala-yapıştır için
+> `bess_kolay.py` ya da defteri kullan.
+
+---
+
 # bess_analiz.py — nasıl kullanılır
 
 ## 1. Kurulum (bir kere)
