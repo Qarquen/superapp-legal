@@ -160,5 +160,18 @@ for j, (k, lab) in enumerate([("S5", "40/50’ye çıkmak (S5 − S3)"), ("S6", 
     c2(f"I{rr}", f"=B{rr}/F{rr}", BOLD, '0.0', RED)
 w2[f"A{r+4}"].value = "Sonuç: 20 MW’ın üstündeki her MW, 370 MW sınırında santralin sekonder payını yerinden ediyor; ek yatırım 5 yılın üstünde dönüyor."
 w2[f"A{r+4}"].font = GRAY
+
+e0 = r + 6
+w2[f"A{e0}"].value = "Primer fiyat eşiği — gerçekçi model (batarya primer ucuzlayınca sekonder/al-sata geçebiliyor)"; w2[f"A{e0}"].font = SECT
+for i, t in enumerate(["Primer fiyatı (TL/MW-saat)", "Bataryanın katkısı (M TL/yıl, Python)", "Geri ödeme (yıl)"]):
+    x = w2.cell(row=e0 + 1, column=1 + i, value=t); x.font = HDR; x.fill = HF; x.border = BOX
+    x.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+for j, (fy, kt) in enumerate([(300, 42.1), (400, 53.3), (500, 64.8), (540, 69.4), (600, 76.4), (669, 84.5)]):
+    rr = e0 + 2 + j
+    c2(f"A{rr}", fy, BLUE, '#,##0'); c2(f"B{rr}", kt, GF, '#,##0.0'); c2(f"C{rr}", f"=$B$6/B{rr}", BOLD, '0.0')
+rr = e0 + 8
+c2(f"A{rr}", "5 yıl için gereken primer fiyatı (540–600 arası doğrusal)", BOLD)
+c2(f"B{rr}", f"=A{e0+5}+($B$6/5-B{e0+5})/(B{e0+6}-B{e0+5})*(A{e0+6}-A{e0+5})", BOLD, '#,##0', GRN)
+c2(f"C{rr}", "TL/MW-saat")
 ws.page_setup.orientation = "landscape"; ws.sheet_properties.pageSetUpPr.fitToPage = True; ws.page_setup.fitToWidth = 1; ws.page_setup.fitToHeight = 0
 wb.save(OUT); print("kaydedildi")
