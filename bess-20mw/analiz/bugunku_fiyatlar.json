@@ -2,49 +2,31 @@
  "kaynak": "bess_analiz.coz(), EPİAŞ saatlik PTF 25.04.2025–24.04.2026",
  "satirlar": [
   {
-   "ad": "Temkinli (sunumun ana senaryosu) · 20/40",
+   "ad": "Ana senaryo: Ocak–Mart 2026 ortalaması",
    "pfk": 1879,
    "sfk": 2000,
    "yatirim": 360.0,
    "santral": 128.8,
-   "katki": 226.4
-  },
-  {
-   "ad": "Orta fiyat · 20/40",
-   "pfk": 2500,
-   "sfk": 2500,
-   "yatirim": 360.0,
-   "santral": 249.2,
-   "katki": 305.6
-  },
-  {
-   "ad": "Bugünkü fiyat · 20/40",
-   "pfk": 4600,
-   "sfk": 3000,
-   "yatirim": 360.0,
-   "santral": 409.8,
-   "katki": 578.6,
+   "katki": 226.4,
    "vurgu": true
   },
   {
-   "ad": "Bugünkü fiyat · 20/30",
-   "pfk": 4600,
-   "sfk": 3000,
-   "yatirim": 312.5,
-   "santral": 409.8,
-   "katki": 580.5
+   "ad": "2025 ortalaması (EPİAŞ, bulunan aylar)",
+   "pfk": 1050,
+   "sfk": 1450,
+   "yatirim": 360.0,
+   "santral": 52.7,
+   "katki": 122.2
   },
   {
-   "ad": "Bugünkü fiyat · 40/50",
+   "ad": "Zirve haftalar (üst sınır, yıl boyu sürmez)",
    "pfk": 4600,
    "sfk": 3000,
-   "yatirim": 577.5,
+   "yatirim": 360.0,
    "santral": 409.8,
-   "katki": 888.3
+   "katki": 578.6
   }
  ],
- "i_20_40": 2,
- "i_40_50": 4,
  "izgara": {
   "pfk": [
    300,
@@ -309,5 +291,27 @@
     "katki_son": 224.1
    }
   ]
+ },
+ "aylik_2025": {
+  "kaynak": "EPİAŞ aylık raporları; Temmuz/Ağustos haftalık",
+  "PFK": {
+   "Oca": 539.44,
+   "Mar": 872.27,
+   "Nis": 1823.11,
+   "May": 1375.79,
+   "Haz": 1004.07,
+   "Tem": 789.32,
+   "Ara": 962.97
+  },
+  "SFK": {
+   "Oca": 619.33,
+   "Mar": 1320.67,
+   "Nis": 1817.94,
+   "May": 2413.09,
+   "Haz": 2985.11,
+   "Tem": 800.14,
+   "Agu": 875.11,
+   "Ara": 759.44
+  }
  }
 }

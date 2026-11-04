@@ -101,7 +101,7 @@ for r, lab, v, f, fmt, fill, nt in K:
     ws.merge_cells(f"C{r}:L{r}"); c(f"C{r}", nt, GRAY, box=False)
 
 c("A42", "6) SEÇENEK 1 DUYARLILIK — geri ödeme (yıl)", SECT, box=False)
-for i, (pr, nt) in enumerate([(669, "PFK 2025 ilk çeyrek seviyesi"), (1879, "Modeldeki değer"), (4600, "Bugünkü fiyat (EPİAŞ 2026 bahar; 18. hafta 4.728)")]):
+for i, (pr, nt) in enumerate([(669, "PFK 2025 ilk çeyrek seviyesi"), (1879, "Modeldeki değer"), (1050, "2025 ortalaması (EPİAŞ, bulunan 7 ay)")]):
     r = 43 + i
     c(f"A{r}", f"PFK fiyatı {pr:,} TL/MW-saat".replace(",", ".")); c(f"C{r}", pr, BLUE, '#,##0')
     c(f"B{r}", f"=E16/(F16*$B$10*C{r}/1000000-H16)", BOLD, '0.0')
@@ -177,7 +177,7 @@ c2(f"C{rr}", "TL/MW-saat")
 # --- Bugünkü fiyatlar senaryosu (EPİAŞ 2026 bahar) ---
 G = _j.load(open("/home/user/superapp-legal/bess-20mw/analiz/bugunku_fiyatlar.json", encoding="utf-8"))
 b0 = e0 + 11
-w2[f"A{b0}"].value = "Bugünkü fiyatlar senaryosu — EPİAŞ 2026 bahar (primer ~4.600, sekonder ~3.000 TL/MW-saat)"; w2[f"A{b0}"].font = SECT
+w2[f"A{b0}"].value = "Fiyat seviyelerine göre — EPİAŞ 2025 ve 2026 (TL/MW-saat)"; w2[f"A{b0}"].font = SECT
 for i, t in enumerate(["Senaryo", "Primer (TL/MW-saat)", "Sekonder (TL/MW-saat)", "Yatırım (M TL)", "Santral sekonder neti (M TL/yıl)",
                        "Bataryanın katkısı (M TL/yıl)", "Batarya geri ödeme (yıl)", "Toplam ek kâr (M TL/yıl)"]):
     x = w2.cell(row=b0 + 1, column=1 + i, value=t); x.font = HDR; x.fill = HF; x.border = BOX
@@ -190,11 +190,9 @@ for j, sat in enumerate(G["satirlar"]):
     c2(f"D{rr}", sat["yatirim"], GF, '#,##0.0'); c2(f"E{rr}", sat["santral"], GF, '#,##0.0'); c2(f"F{rr}", sat["katki"], GF, '#,##0.0')
     c2(f"G{rr}", f"=D{rr}/F{rr}", BOLD, '0.0', GRN if sat.get("vurgu") else None)
     c2(f"H{rr}", f"=E{rr}+F{rr}", BOLD, '#,##0.0')
-n = len(G["satirlar"]); i20 = b0 + 2 + G["i_20_40"]; i40 = b0 + 2 + G["i_40_50"]; rr = b0 + 2 + n
-c2(f"A{rr}", "Bugünkü fiyatlarla 40/50’ye çıkmanın EK geri ödemesi")
-c2(f"D{rr}", f"=D{i40}-D{i20}", BLK, '#,##0.0'); c2(f"F{rr}", f"=F{i40}-F{i20}", BLK, '#,##0.0'); c2(f"G{rr}", f"=D{rr}/F{rr}", BOLD, '0.0')
-w2[f"A{rr+2}"].value = ("Dikkat: bu fiyatlar bahar zirvesi. 2026’da haftalık primer 1.376–4.728, sekonder 1.112–4.701 TL/MW arasında oynadı; "
-                        "Haziran 2026’da 108 MW’lık Göktepe bataryası primer pazarına girdi. Yatırım kararı temkinli satıra göre verilmeli.")
+n = len(G["satirlar"]); rr = b0 + 1 + n
+w2[f"A{rr+2}"].value = ("2025 aylık (EPİAŞ): primer 539–1.823, sekonder 619–2.985 TL/MW-saat. Zirve satırı yalnız birkaç haftalık tepe; "
+                        "yatırım kararı ana senaryo ve 2025 ortalamasına göre verilmeli.")
 w2[f"A{rr+2}"].font = GRAY
 w2[f"A{rr+3}"].value = "Fiyatlar termik santral için de geçerli: TEİAŞ testini geçen her ünite aynı fiyatı alır. Birim TL/MW-saat (hazırda tutulan kapasite)."
 w2[f"A{rr+3}"].font = GRAY
