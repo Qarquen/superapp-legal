@@ -280,5 +280,34 @@
     "ref_kayip": -480.1673685
    }
   }
+ },
+ "boyut": {
+  "not": "temkinli fiyat (1.879/2.000); kullanılabilir = etiket × 0,90 (yeni) ve × 0,72 (ömür sonu, %80 sağlık)",
+  "satirlar": [
+   {
+    "mwh": 25,
+    "yatirim": 288.8,
+    "katki_yeni": 203.3,
+    "katki_son": 159.3
+   },
+   {
+    "mwh": 30,
+    "yatirim": 312.5,
+    "katki_yeni": 227.0,
+    "katki_son": 193.5
+   },
+   {
+    "mwh": 40,
+    "yatirim": 360.0,
+    "katki_yeni": 226.0,
+    "katki_son": 225.3
+   },
+   {
+    "mwh": 50,
+    "yatirim": 407.5,
+    "katki_yeni": 225.0,
+    "katki_son": 224.1
+   }
+  ]
  }
 }

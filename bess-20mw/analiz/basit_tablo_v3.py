@@ -198,5 +198,26 @@ w2[f"A{rr+2}"].value = ("Dikkat: bu fiyatlar bahar zirvesi. 2026’da haftalık 
 w2[f"A{rr+2}"].font = GRAY
 w2[f"A{rr+3}"].value = "Fiyatlar termik santral için de geçerli: TEİAŞ testini geçen her ünite aynı fiyatı alır. Birim TL/MW-saat (hazırda tutulan kapasite)."
 w2[f"A{rr+3}"].font = GRAY
+
+# --- Enerji boyu seçimi ---
+k0 = rr + 6
+w2[f"A{k0}"].value = "Enerji boyu seçimi — 20 MW primer için kaç MWh? (temkinli fiyat)"; w2[f"A{k0}"].font = SECT
+c2(f"A{k0+1}", "Kullanılabilir oran (yeni)"); c2(f"B{k0+1}", 0.90, BLUE, '0%')
+c2(f"A{k0+2}", "Ömür sonu kapasite (garanti sonu)"); c2(f"B{k0+2}", 0.80, BLUE, '0%')
+c2(f"A{k0+3}", "TEİAŞ şartı: kullanılabilir enerji ≥ 20 MW × 1,25 (MWh)"); c2(f"B{k0+3}", "=20*1.25", BOLD, '0.0')
+c2(f"A{k0+4}", "En az gereken etiket enerjisi (MWh)"); c2(f"B{k0+4}", f"=B{k0+3}/B{k0+1}/B{k0+2}", BOLD, '0.0', GRN)
+for i, t in enumerate(["Etiket enerjisi (MWh)", "Kullanılabilir, yeni", "Kullanılabilir, ömür sonu", "Ömür boyu şartı sağlar mı?",
+                       "Yatırım (M TL)", "Katkı yeni (M TL/yıl)", "Katkı ömür sonu (M TL/yıl)", "Geri ödeme, ömür sonu (yıl)"]):
+    x = w2.cell(row=k0 + 6, column=1 + i, value=t); x.font = HDR; x.fill = HF; x.border = BOX
+    x.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+w2.row_dimensions[k0 + 6].height = 44
+for j, b in enumerate(G["boyut"]["satirlar"]):
+    q = k0 + 7 + j; vurgu = b["mwh"] == 40
+    c2(f"A{q}", b["mwh"], BLUE, '0'); c2(f"B{q}", f"=A{q}*$B${k0+1}", BLK, '0.0'); c2(f"C{q}", f"=A{q}*$B${k0+1}*$B${k0+2}", BLK, '0.0')
+    c2(f"D{q}", f'=IF(C{q}>=$B${k0+3},"EVET","HAYIR")', BOLD, None, GRN if vurgu else None)
+    c2(f"E{q}", b["yatirim"], GF, '#,##0.0'); c2(f"F{q}", b["katki_yeni"], GF, '#,##0.0'); c2(f"G{q}", b["katki_son"], GF, '#,##0.0')
+    c2(f"H{q}", f"=E{q}/G{q}", BOLD, '0.0', GRN if vurgu else None)
+w2[f"A{k0+12}"].value = "Sonuç: 40 MWh (8 × 5 MWh konteyner) ömür boyu 20 MW’ın tamamını satan en küçük boy. 30 MWh 47 M TL ucuz ama yaşlandıkça yılda ~33 M TL kaybettirir."
+w2[f"A{k0+12}"].font = GRAY
 ws.page_setup.orientation = "landscape"; ws.sheet_properties.pageSetUpPr.fitToPage = True; ws.page_setup.fitToWidth = 1; ws.page_setup.fitToHeight = 0
 wb.save(OUT); print("kaydedildi")
