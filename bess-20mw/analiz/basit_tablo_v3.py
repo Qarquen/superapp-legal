@@ -217,5 +217,22 @@ for j, b in enumerate(G["boyut"]["satirlar"]):
     c2(f"H{q}", f"=E{q}/G{q}", BOLD, '0.0', GRN if vurgu else None)
 w2[f"A{k0+12}"].value = "Sonuç: 40 MWh (8 × 5 MWh konteyner) ömür boyu 20 MW’ın tamamını satan en küçük boy. 30 MWh 47 M TL ucuz ama yaşlandıkça yılda ~33 M TL kaybettirir."
 w2[f"A{k0+12}"].font = GRAY
+
+# --- Santral sekonder bandı ---
+s0 = k0 + 15
+w2[f"A{s0}"].value = "Santral ne kadar sekonder tutabilir? (bant = (tam yük − minimum yük) ÷ 2, yukarı ve aşağı eşit)"; w2[f"A{s0}"].font = SECT
+c2(f"A{s0+1}", "Santral tam yük (MW)"); c2(f"B{s0+1}", 350, BLUE, '0')
+for i, t in enumerate(["Minimum yük (MW)", "Sekonder bandı (MW)", "Santral sekonder neti, 2026 ilk çeyrek (M TL/yıl)", "Santral sekonder neti, 2025 ortalaması (M TL/yıl)", "Bantın MW başına değeri, 2026 (M TL/MW)"]):
+    x = w2.cell(row=s0 + 3, column=1 + i, value=t); x.font = HDR; x.fill = HF; x.border = BOX
+    x.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+w2.row_dimensions[s0 + 3].height = 44
+for j, b in enumerate(G["santral_bant"]):
+    q = s0 + 4 + j
+    c2(f"A{q}", b["min"], BLUE, '0'); c2(f"B{q}", f"=($B${s0+1}-A{q})/2", BOLD, '0.0', GRN if j == 0 else None)
+    c2(f"C{q}", b["n2026"], GF, '#,##0.0'); c2(f"D{q}", b["n2025"], GF, '#,##0.0'); c2(f"E{q}", f"=C{q}/B{q}", BLK, '0.00')
+q = s0 + 4 + len(G["santral_bant"])
+c2(f"A{q}", "180 MW sekonder için gereken salınım (MW)"); c2(f"B{q}", "=180*2", BOLD, '0', RED)
+w2[f"A{q+1}"].value = "180 MW sekonder için santralin 360 MW oynaması gerekir; 350 MW’lık ünitede mümkün değil. Düşük yükte verim kaybı, aşınma ve rampa hızı modele girmedi."
+w2[f"A{q+1}"].font = GRAY
 ws.page_setup.orientation = "landscape"; ws.sheet_properties.pageSetUpPr.fitToPage = True; ws.page_setup.fitToWidth = 1; ws.page_setup.fitToHeight = 0
 wb.save(OUT); print("kaydedildi")
